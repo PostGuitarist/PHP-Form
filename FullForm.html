@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en-US">
+ <head>                
+ <meta name="author" content="Zaden Connell">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>PHP Contact Form</title>
+ </head>
+ 
+ <body>
+    <form id ="test-form" action="mail.php" method="POST">
+		<p><strong>Date:</strong></p> <input type="text" name="date" required><br />
+		<p><strong>Company Name:</strong></p> <input type="text" name="company"><br />
+		<p><strong>Contact Name:</strong></p> <input type="text" name="name" required><br />
+		<p><strong>Address:</strong></p> <input type="text" name="address" required><br />
+		<p><strong>Zip Code:</strong></p> <input type="text" name="zipcode" required><br />
+		<p><strong>State:</strong></p> <input type="text" name="state" required><br />
+		<p><strong>Request Phone Call?</strong></p>
+            Yes:<input type="radio" value="Yes" name="call">
+            No:<input type="radio" value="No" name="call"><br />
+		<p><strong>Phone Number:</strong></p> <input type="text" name="phone" required><br />
+		<p><strong>Email:</strong></p> <input type="text" name="email" required> <br />
+		<p><strong>Is this just for recycling?</strong></p>
+			Yes:<input type="radio" value="Yes" name="recycle">
+            No:<input type="radio" value="No" name="recycle"><br />
+		<p><strong>Type of computer:</strong></p>
+            Desktop:<input type="radio" value="desktop" name="message">
+            Laptop:<input type="radio" value="laptop" name="message"><br />
+		<p><strong>OS:</strong></p>	
+		    Windows:<input type="radio" value="windows" name="message">
+			Linux:<input type="radio" value="linux" name="message">
+			MacOS X:<input type="radio" value="macosx" name="message"><br />
+		<p><strong>Computer Specifications:</strong></p> 
+			Motherboard:<br /><textarea name="message" rows="5" cols="25" required></textarea><br />
+			CPU:<br /><textarea name="message" rows="5" cols="25" required></textarea><br />
+			Drive(s):<br /><textarea name="message" rows="5" cols="25" required></textarea><br />
+			Other:<br /><textarea name="message" rows="5" cols="25" required></textarea><br />
+		<br />
+		<p><strong>Which best describes your problems? (If any)</strong></p>
+			It won't start.<input type="checkbox" value="nostart" name="problems"><br />
+			It runs slow.<input type="checkbox" value="slow" name="problems"><br />
+			There are viruses.<input type="checkbox" value="virus" name="problems"><br />
+		<p><strong>Other Problems:</strong></p> <textarea name="problems" rows="5" cols="25"></textarea>
+		<br />
+		<p><strong>Does the device have a warranty?</strong></p>
+            Yes:<input type="radio" value="Yes" name="warranty">
+            No:<input type="radio" value="No" name="warranty">
+		<br />
+		<p><strong>Additional Comments:</strong></p> <textarea name="comments" rows="5" cols="25"></textarea><br />      
+		<?php
+            // Before using $_POST['value'] 
+            if(isset($_POST['date']) && isset($_POST['company']) && isset($_POST['name']) && isset($_POST['address']) && isset($_POST['zipcode']) && isset($_POST['state']) && isset($_POST['state']) && isset($_POST['call']) && isset($_POST['phone']) && isset($_POST['email']) && isset($_POST['recycle']) && isset($_POST['message']) && isset($_POST['problems']) && isset($_POST['warranty']) && isset($_POST['comments']))
+
+            {
+            $date = $_POST['date'];
+            $company = $_POST['company'];
+            $name = $_POST['name'];
+            $address = $_POST['address'];
+            $zipcode = $_POST['zipcode'];
+            $state = $_POST['state'];
+            $call = $_POST['call'];
+            $phone = $_POST['phone'];
+            $email = $_POST['email'];
+            $recycle = $_POST['recycle'];
+            $computer_specs = $_POST['message'];
+            $formcontent="From: $name \n Message: $computer_specs";
+            $computer_prob = $_POST['problems'];
+            $formcontent2="From: $name \n Message: $computer_prob";
+            $warranty = $_POST['warranty'];
+            $comments = $_POST['comments'];
+            $formcontent3="From: $name \n Message: $comments";
+
+            // Who the form answers are sent to (Obsolete, JS used into Google Sheets)
+            $recipient = "zaden.connell@gmail.com";
+
+            // The subject
+            $subject = "Contact Form";
+
+            // Who the answers are from
+            $mailheader = "From: $email \r\n";
+
+            // Declaration of the items
+            mail($recipient, $subject, $mailheader, $date, $company, $name, $address, $zipcode, $state, $call, $phone, $email, $recycle, $computer_specs, $formcontent, $computer_prob, $formcontent2, $warranty, $comments, $formcontent3) or die("Error!");
+            }
+            // Site after submit
+            echo "Thank You! Your response has been submitted."
+            ?>
+		<br />
+		<button type="submit" id="submit-form">Submit</button>
+    </form>
+    <script>
+        var $form = $('form#test-form'),
+        url = 'https://script.google.com/macros/s/AKfycbwJgipz3MJez99mWJOMlzJhbqygqpqvN_KgLl38My-6QxmAC-Y/exec'
+
+            $('#submit-form').on('click', function(e) {
+            e.preventDefault();
+            var jqxhr = $.ajax({
+             url: url,
+             method: "POST",
+              dataType: "json",
+              data: $form.serializeObject()
+             }).success(
+              // do something
+             );
+            })
+  </script>
+ </body>
+</html>
